@@ -5,6 +5,9 @@
 grafana:
   adminPassword: skillpulse-demo
   defaultDashboardsEnabled: true   # ship the bundled k8s + node + prom dashboards
+  service:
+    type: NodePort
+    nodePort: 30030
   resources:
     requests:
       cpu: 100m
