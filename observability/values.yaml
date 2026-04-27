@@ -3,6 +3,11 @@
 # All 20+ default Grafana dashboards stay enabled — that's the demo headline.
 
 grafana:
+  # Pin Grafana 12.4.3 (last stable v12). Chart 84.2.0's default is v13.0.1
+  # which has a panel-asset regression: /public/build/<panel>/module.js
+  # returns 302→HTML, so timeseries/table/etc panels can't load.
+  image:
+    tag: "12.4.3"
   adminPassword: skillpulse-demo
   defaultDashboardsEnabled: true   # ship the bundled k8s + node + prom dashboards
   service:
@@ -10,11 +15,11 @@ grafana:
     nodePort: 30030
   resources:
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 200m
+      memory: 384Mi
     limits:
-      cpu: 500m
-      memory: 256Mi
+      cpu: 1000m
+      memory: 1Gi
 
 prometheus:
   prometheusSpec:
