@@ -25,3 +25,6 @@ Thumbs.db
 *.tfvars
 !*.tfvars.example
 .terraform/
+
+# AI assistant context — kept local only, never committed
+CLAUDE.md
