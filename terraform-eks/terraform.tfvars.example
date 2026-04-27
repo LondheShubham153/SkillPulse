@@ -1,0 +1,7 @@
+# All defaults are sensible. Override here if you want.
+# Copy to terraform.tfvars (gitignored) before applying.
+
+# region              = "us-west-2"
+# cluster_name        = "skillpulse"
+# cluster_version     = "1.32"
+# node_instance_type  = "t3.large"

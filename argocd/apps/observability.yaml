@@ -1,0 +1,33 @@
+# Multi-source Application: pulls the kube-prometheus-stack chart from the
+# Prometheus community Helm repo, but uses our repo's observability/values.yaml
+# as the values overlay. This keeps chart values in git alongside the rest.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: observability
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 84.2.0
+      helm:
+        releaseName: kube-prometheus-stack
+        valueFiles:
+          - $values/observability/values.yaml
+    - repoURL: https://github.com/LondheShubham153/SkillPulse.git
+      targetRevision: gitops
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

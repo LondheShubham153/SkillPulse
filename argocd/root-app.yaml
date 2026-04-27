@@ -1,0 +1,27 @@
+# Root Application — the "app of apps" entry point.
+# Apply this once after installing ArgoCD. It then syncs every Application
+# defined under argocd/apps/, which in turn manage the actual workloads.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: skillpulse-root
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/LondheShubham153/SkillPulse.git
+    targetRevision: gitops
+    path: argocd/apps
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -17,3 +17,11 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Terraform safety net — `terraform/` has its own .gitignore, but if anyone runs
+# terraform from the wrong cwd these guard rails catch the stray output.
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform/

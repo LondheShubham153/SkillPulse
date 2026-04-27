@@ -1,0 +1,32 @@
+# Terraform state — local only, contains sensitive output
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Plan files
+*.tfplan
+
+# Local var files (may contain account-specific values)
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI config
+.terraformrc
+terraform.rc
+
+# Plugin cache
+.terraform/
+
+# Generated SSH keys (if any)
+*.pem

@@ -1,0 +1,65 @@
+# kube-prometheus-stack values overlay — minimal, demo-tuned.
+# Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+# All 20+ default Grafana dashboards stay enabled — that's the demo headline.
+
+grafana:
+  adminPassword: skillpulse-demo
+  defaultDashboardsEnabled: true   # ship the bundled k8s + node + prom dashboards
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+prometheus:
+  prometheusSpec:
+    retention: 6h
+    retentionSize: ""
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1536Mi
+    # Don't auto-discover ServiceMonitors outside the chart's own selectors —
+    # keeps the demo focused on the bundled targets.
+    serviceMonitorSelectorNilUsesHelmValues: true
+    podMonitorSelectorNilUsesHelmValues: true
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+
+# Trim the operator itself
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# Built-in exporters
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+
+# Skip a few control-plane scrapes that EKS doesn't expose anyway
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false

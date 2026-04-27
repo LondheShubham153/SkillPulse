@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: skillpulse
+  labels:
+    app.kubernetes.io/name: skillpulse
+    app.kubernetes.io/part-of: skillpulse
