@@ -2,11 +2,20 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [gitops]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image: skillpulse-backend
+            context: ./backend
+            dockerfile: ./backend/Dockerfile
+          - image: skillpulse-frontend
+            context: .
+            dockerfile: ./frontend/Dockerfile
     steps:
       - uses: actions/checkout@v6
 
@@ -19,8 +28,9 @@ jobs:
 
       - uses: docker/build-push-action@v7
         with:
-          context: ./backend
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
