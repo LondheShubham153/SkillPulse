@@ -16,10 +16,26 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          
           script: |
-            cd ~/skillpulse
-            git pull origin main
+            set -eu
+
+            APP_DIR="$HOME/SkillPulse"
+            REPO_URL="https://github.com/vijaymagre/SkillPulse.git"
+
+            if [ ! -d "$APP_DIR/.git" ]; then
+              echo "Repository not found. Cloning..."
+              git clone "$REPO_URL" "$APP_DIR"
+            fi
+
+            cd "$APP_DIR"
+
+            echo "Updating repository..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "Deploying containers..."
             docker compose pull
             docker compose up -d
-            docker image prune -f
-#
+            docker compose ps
+
