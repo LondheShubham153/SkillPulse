@@ -1,6 +1,6 @@
 # SkillPulse
 
-Track your skills. Log your learning. Ship via GitHub Actions..
+Track vijay your skills. Log your learning. Ship via GitHub Actions..
 
 A small full-stack app — **Go + Gin API, MySQL, vanilla-JS frontend behind nginx** —
 used as the hands-on project for a TrainWithShubham DevOps course.
