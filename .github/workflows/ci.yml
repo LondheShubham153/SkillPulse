@@ -24,3 +24,4 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:latest
+#
