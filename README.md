@@ -1,4 +1,4 @@
-# SkillPulse
+# SkillPulse vijay
 
 Track vijay your skills. Log your learning. Ship via GitHub Actions..
 
