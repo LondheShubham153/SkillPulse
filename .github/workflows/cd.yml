@@ -37,6 +37,11 @@ jobs:
           script: |
             set -e
             cd /home/ubuntu/skillpulse
+            test -f .env || {
+              echo "ERROR: .env file missing on EC2"
+               exit 1
+            }
+            docker compose config --quiet   
             docker compose pull
             docker compose up -d --remove-orphans
             docker image prune -f
