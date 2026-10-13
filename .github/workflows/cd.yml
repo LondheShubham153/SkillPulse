@@ -1,3 +1,4 @@
+
 name: CD
 
 on:
@@ -6,36 +7,37 @@ on:
     types: [completed]
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+
     steps:
-      - uses: appleboy/ssh-action@v1
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy Compose file to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          
+          source: "docker-compose.yml"
+          target: "/home/ubuntu/skillpulse"
+
+      - name: Deploy application on EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            set -eu
-
-            APP_DIR="$HOME/SkillPulse"
-            REPO_URL="https://github.com/vijaymagre/SkillPulse.git"
-
-            if [ ! -d "$APP_DIR/.git" ]; then
-              echo "Repository not found. Cloning..."
-              git clone "$REPO_URL" "$APP_DIR"
-            fi
-
-            cd "$APP_DIR"
-
-            echo "Updating repository..."
-            git fetch origin main
-            git reset --hard origin/main
-
-            echo "Deploying containers..."
+            set -e
+            cd /home/ubuntu/skillpulse
             docker compose pull
-            docker compose up -d
+            docker compose up -d --remove-orphans
+            docker image prune -f
             docker compose ps
-
